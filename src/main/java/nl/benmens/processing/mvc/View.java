@@ -182,10 +182,34 @@ public class View {
   }
 
   public final void draw() {
+    if (!isVisible) {
+      return;
+    }
+
     Rectangle2D.Float clipBoundary = getClipBoundary();
+    if (clipBoundary != null) {
+      PVector clipBoundaryTopLeft = new PVector(clipBoundary.x, clipBoundary.y);
+      PVector clipBoundaryBottomRight = new PVector(clipBoundary.x + clipBoundary.width, 
+                                                    clipBoundary.y + clipBoundary.height);
+
+      clipBoundaryTopLeft = screenPosToViewPos(clipBoundaryTopLeft);
+      clipBoundaryBottomRight = screenPosToViewPos(clipBoundaryBottomRight);
+
+      clipBoundary = new Rectangle2D.Float(
+        clipBoundaryTopLeft.x,
+        clipBoundaryTopLeft.y,
+        clipBoundaryBottomRight.x - clipBoundaryTopLeft.x,
+        clipBoundaryBottomRight.y - clipBoundaryTopLeft.y
+      );
+    }
 
     if (clipBoundary == null || (clipBoundary.width > 0 && clipBoundary.height > 0)) {
       SharedPApplet.push();
+
+      SharedPApplet.translate(frameRect.x, frameRect.y);
+      PVector scale = getScale();
+      SharedPApplet.scale(scale.x, scale.y);
+      SharedPApplet.translate(-boundsRect.x, -boundsRect.y);
 
       if (clipBoundary != null) {
         SharedPApplet.clip(
@@ -197,24 +221,37 @@ public class View {
         SharedPApplet.noClip();
       }
 
-      SharedPApplet.translate(frameRect.x, frameRect.y);
-      PVector scale = getScale();
-      SharedPApplet.scale(scale.x, scale.y);
-      SharedPApplet.translate(-boundsRect.x, -boundsRect.y);
-
-      if (isVisible) {
-        if (hasBackground) {
-          SharedPApplet.background(backgroundColor);
-        }
-
-        beforeDrawChildren();
-
-        for (View childView : childViews) {
-          childView.draw();
-        }
-
-        afterDrawChildren();
+      if (hasBackground) {
+        SharedPApplet.background(backgroundColor);
       }
+
+      beforeDrawChildren();
+
+      for (View childView : childViews) {
+        if (clipBoundary != null) {
+          SharedPApplet.clip(
+            Math.round(clipBoundary.x), 
+            Math.round(clipBoundary.y), 
+            Math.round(clipBoundary.width), 
+            Math.round(clipBoundary.height));
+        } else {
+          SharedPApplet.noClip();
+        }
+
+        childView.draw();
+      }
+
+      if (clipBoundary != null) {
+        SharedPApplet.clip(
+          Math.round(clipBoundary.x), 
+          Math.round(clipBoundary.y), 
+          Math.round(clipBoundary.width), 
+          Math.round(clipBoundary.height));
+      } else {
+        SharedPApplet.noClip();
+      }
+
+      afterDrawChildren();
 
       SharedPApplet.pop();
     }
@@ -324,7 +361,8 @@ public class View {
 
     if (shouldClip) {
       PVector upperLeft = viewPosToScreenPos(new PVector(boundsRect.x, boundsRect.y));
-      PVector lowerRight = viewPosToScreenPos(new PVector(boundsRect.width, boundsRect.height));
+      PVector lowerRight = viewPosToScreenPos(new PVector(boundsRect.x + boundsRect.width, 
+                                                          boundsRect.y + boundsRect.height));
 
       viewClip = new Rectangle2D.Float(
         upperLeft.x, 
