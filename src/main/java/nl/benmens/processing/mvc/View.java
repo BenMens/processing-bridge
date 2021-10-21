@@ -3,6 +3,7 @@ package nl.benmens.processing.mvc;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import processing.awt.PGraphicsJava2D;
 import processing.core.PVector;
 
 import nl.benmens.processing.MouseEventsHandler;
@@ -187,7 +188,8 @@ public class View {
     }
 
     Rectangle2D.Float clipBoundary = getClipBoundary();
-    if (clipBoundary != null) {
+    String renderer = SharedPApplet.sketchRenderer();
+    if (clipBoundary != null && renderer.endsWith("PGraphicsJava2D")) {
       PVector clipBoundaryTopLeft = new PVector(clipBoundary.x, clipBoundary.y);
       PVector clipBoundaryBottomRight = new PVector(clipBoundary.x + clipBoundary.width, 
                                                     clipBoundary.y + clipBoundary.height);
