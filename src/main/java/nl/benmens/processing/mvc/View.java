@@ -3,7 +3,6 @@ package nl.benmens.processing.mvc;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import processing.awt.PGraphicsJava2D;
 import processing.core.PVector;
 
 import nl.benmens.processing.MouseEventsHandler;
