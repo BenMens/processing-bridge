@@ -688,6 +688,14 @@ public class SharedPApplet {
     return sharedApplet.isLooping();
   }
 
+  static public String join(String[] list, char separator) {
+    return SharedPApplet.join(list, separator);
+  }
+
+  static public String join(String[] list, String separator) {
+    return SharedPApplet.join(list, separator);
+  }
+
   static public void keyPressed() {
     sharedApplet.keyPressed();
   }
