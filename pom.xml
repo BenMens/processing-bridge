@@ -81,6 +81,20 @@
       </plugin>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
         <version>0.12</version>
@@ -89,14 +103,14 @@
           <noJekyll>true</noJekyll>
           <outputDirectory>${project.build.directory}/mvn-artifact</outputDirectory>
           <branch>
-            refs/heads/mvn
+            refs/heads/main
           </branch>
           <includes>
             <include>**/*</include>
           </includes>
           <merge>true</merge>
           <repositoryName>
-            processing-bridge
+            maven-repo
           </repositoryName>
           <repositoryOwner>
             benmens
