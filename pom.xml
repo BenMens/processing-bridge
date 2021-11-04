@@ -5,10 +5,10 @@
 
   <groupId>nl.benmens</groupId>
   <artifactId>processing-bridge</artifactId>
-  <version>3.5.4-SNAPSHOT</version>
-  
+  <version>3.5.5-SNAPSHOT</version>
+
   <name>processing-bridge</name>
-  <url>https://github.com/BenMens/processing-bridge/blob/master/readme.md</url>
+  <url>https://raw.githubusercontent.com/BenMens/processing-bridge/main/readme.md</url>
 
   <repositories>
     <repository>
@@ -17,7 +17,7 @@
       <url>file:${project.basedir}/repo</url>
     </repository>
   </repositories>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -58,7 +58,7 @@
       <version>2.13.3</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
@@ -69,6 +69,58 @@
   </dependencies>
 
   <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <configuration>
+          <altDeploymentRepository>
+                internal.repo::default::file://${project.build.directory}/mvn-artifact
+            </altDeploymentRepository>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.12</version>
+        <configuration>
+          <message>Maven artifacts for ${project.version}</message>
+          <noJekyll>true</noJekyll>
+          <outputDirectory>${project.build.directory}/mvn-artifact</outputDirectory>
+          <branch>
+            refs/heads/mvn
+          </branch>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <merge>true</merge>
+          <repositoryName>
+            processing-bridge
+          </repositoryName>
+          <repositoryOwner>
+            benmens
+          </repositoryOwner>
+          <server>github</server>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
-  
+
+  <distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <name>Temporary Staging Repository</name>
+      <url>file://${project.build.directory}/mvn-artifact</url>
+    </repository>
+  </distributionManagement>
+
 </project>
