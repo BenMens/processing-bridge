@@ -14,7 +14,7 @@ public class Subject<T> {
   public ArrayList<T> getObservers() {
     ArrayList<T> result = new ArrayList<T>();
 
-    for (WeakReference<Subscription<T>> ref: subscriptions) {
+    for (WeakReference<Subscription<T>> ref : subscriptions) {
       Subscription<T> subscription = ref.get();
 
       if (subscription != null) {
@@ -25,19 +25,8 @@ public class Subject<T> {
     return result;
   }
 
-  private ArrayList<WeakReference<Subscription<T>>> getSubscriptionsClone() {
-    ArrayList<WeakReference<Subscription<T>>> result = new ArrayList<WeakReference<Subscription<T>>>();
-
-    for (WeakReference<Subscription<T>> ref: subscriptions) {
-      result.add(ref);
-    }
-
-    return result;
-  }
-
-
   private Subscription<T> findSubscription(T observer) {
-    for (WeakReference<Subscription<T>> ref: subscriptions) {
+    for (WeakReference<Subscription<T>> ref : subscriptions) {
       Subscription<T> subscription = ref.get();
 
       if (subscription != null && subscription.observer == observer) {
@@ -49,7 +38,7 @@ public class Subject<T> {
   }
 
   public boolean hasObserver(T observer) {
-    for (WeakReference<Subscription<T>> ref: subscriptions) {
+    for (WeakReference<Subscription<T>> ref : subscriptions) {
       Subscription<T> subscription = ref.get();
 
       if (subscription != null && subscription.observer == observer) {
@@ -60,40 +49,45 @@ public class Subject<T> {
     return false;
   }
 
-  private Subscription<?> getSubscription(T observer) {
-    Subscription<T> subscription = findSubscription(observer);
-
-    if (subscription == null) {
-      subscription = new Subscription<T>(observer, this);
-      subscriptions.add(new WeakReference<Subscription<T>>(subscription));
-    } 
-
-    return subscription;
+  protected void add(Subscription<T> subscription) {
+    subscriptions.add(new WeakReference<Subscription<T>>(subscription));
   }
 
-  public Subscription<?> subscribe(T observer, SubscriptionManager subscriptionManager) {
-    return (Subscription<?>)subscriptionManager.add(this.getSubscription(observer));
-  }
+  protected void remove(Subscription<T> subscription) {
+    ArrayList<WeakReference<Subscription<T>>> clonedSubscriptions = 
+      new ArrayList<WeakReference<Subscription<T>>>(subscriptions);
 
-  protected void unsubscribe(Object observer) {
-    ArrayList<WeakReference<Subscription<T>>> clonedList = getSubscriptionsClone();
-
-    for (WeakReference<Subscription<T>> ref: clonedList) {
-      Subscription<T> subscription = ref.get();
+    for (WeakReference<Subscription<T>> ref : clonedSubscriptions) {
+      Subscription<T> currentSubscription = ref.get();
       
       if (subscription == null) {
         // remove cleared subscriptions
         subscriptions.remove(ref);
-      } else if (subscription.observer == observer) {
+      } else if (currentSubscription == subscription) {
         subscriptions.remove(ref);
       }
     }
   }
 
-  public void unsubscribeAll() {
-    ArrayList<WeakReference<Subscription<T>>> clonedList = getSubscriptionsClone();
+  public Subscription<?> subscribe(T observer, SubscriptionManager subscriptionManager) {
+    return this.getSubscription(observer, subscriptionManager);
+  }
 
-    for (WeakReference<Subscription<T>> ref: clonedList) {
+  private Subscription<?> getSubscription(T observer,SubscriptionManager subscriptionManager) {
+    Subscription<T> subscription = findSubscription(observer);
+
+    if (subscription == null) {
+      subscription = new Subscription<T>(observer, this, subscriptionManager);
+    } 
+
+    return subscription;
+  }
+
+  public void unsubscribeAll() {
+    ArrayList<WeakReference<Subscription<T>>> clonedSubscriptions = 
+      new ArrayList<WeakReference<Subscription<T>>>(subscriptions);
+
+    for (WeakReference<Subscription<T>> ref : clonedSubscriptions) {
       Subscription<T> subscription = ref.get();
 
       if (subscription != null) {

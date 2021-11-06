@@ -4,19 +4,23 @@ import java.util.ArrayList;
 
 public class SubscriptionManager {
 
-  ArrayList<Subscription<?>> subscriptions = new ArrayList<Subscription<?>>();
+  private ArrayList<Subscription<?>> subscriptions = new ArrayList<Subscription<?>>();
   
   public SubscriptionManager() {
   }
 
-  protected Subscription<?> add(Subscription<?> subscription) {
-    this.subscriptions.add(subscription);
+  protected void add(Subscription<?> subscription) {
+    subscriptions.add(subscription);
+  }
 
-    return subscription;
+  protected void remove(Subscription<?> subscription) {
+    subscriptions.remove(subscription);
   }
 
   public void unsubscribeAll() {
-    for (Subscription<?> subscription :subscriptions) {
+    ArrayList<Subscription<?>> clonedSubscription = new ArrayList<Subscription<?>>(subscriptions);
+
+    for (Subscription<?> subscription : clonedSubscription) {
       subscription.unsubscribe();
     }
 
@@ -24,16 +28,13 @@ public class SubscriptionManager {
   }
 
   public void unsubscribeAll(Object source) {
-    ArrayList<Subscription<?>> toRemove = new ArrayList<Subscription<?>>();
+    ArrayList<Subscription<?>> clonedSubscription = new ArrayList<Subscription<?>>(subscriptions);
 
-    for (Subscription<?> subscription :subscriptions) {
+    for (Subscription<?> subscription : clonedSubscription) {
       if (subscription.subject.source == source) {
         subscription.unsubscribe();
-        toRemove.add(subscription);
       }
     }
-
-    subscriptions.removeAll(toRemove);
   }
 
 }
