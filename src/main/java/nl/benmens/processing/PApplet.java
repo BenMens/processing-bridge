@@ -26,15 +26,15 @@ public class PApplet extends processing.core.PApplet {
 
   @Override
   public void keyPressed(KeyEvent event) {
-    for (KeyEventsHandler s: SharedPApplet.keyEvents.getSubscribers()) {
-      s.keyPressed(event);
+    for (KeyEventsHandler observer: SharedPApplet.keyEvents.getObservers()) {
+      observer.keyPressed(event);
     }
   }
 
   @Override
   public void keyReleased(KeyEvent event) {
-    for (KeyEventsHandler s: SharedPApplet.keyEvents.getSubscribers()) {
-      s.keyReleased(event);
+    for (KeyEventsHandler observer: SharedPApplet.keyEvents.getObservers()) {
+      observer.keyReleased(event);
     } 
   }
 
@@ -44,8 +44,8 @@ public class PApplet extends processing.core.PApplet {
       SharedPApplet.keysPressed[key] = true;
     }
 
-    for (MouseEventsHandler s: SharedPApplet.mouseEvents.getSubscribers()) {
-      s.mousePressed(mouseX, mouseY, pmouseX, pmouseY);
+    for (MouseEventsHandler observer: SharedPApplet.mouseEvents.getObservers()) {
+      observer.mousePressed(mouseX, mouseY, pmouseX, pmouseY);
     } 
   }
 
@@ -55,29 +55,29 @@ public class PApplet extends processing.core.PApplet {
       SharedPApplet.keysPressed[key] = false;
     }
 
-    for (MouseEventsHandler s: SharedPApplet.mouseEvents.getSubscribers()) {
-      s.mouseReleased(mouseX, mouseY, pmouseX, pmouseY);
+    for (MouseEventsHandler observer: SharedPApplet.mouseEvents.getObservers()) {
+      observer.mouseReleased(mouseX, mouseY, pmouseX, pmouseY);
     } 
   }
 
   @Override
   public void mouseMoved(MouseEvent event) {
-    for (MouseEventsHandler s: SharedPApplet.mouseEvents.getSubscribers()) {
-      s.mouseMoved(mouseX, mouseY, pmouseX, pmouseY);
+    for (MouseEventsHandler observer: SharedPApplet.mouseEvents.getObservers()) {
+      observer.mouseMoved(mouseX, mouseY, pmouseX, pmouseY);
     } 
   }
 
   @Override
   public void mouseDragged(MouseEvent event) {
-    for (MouseEventsHandler s: SharedPApplet.mouseEvents.getSubscribers()) {
-      s.mouseDragged(mouseX, mouseY, pmouseX, pmouseY);
+    for (MouseEventsHandler observer: SharedPApplet.mouseEvents.getObservers()) {
+      observer.mouseDragged(mouseX, mouseY, pmouseX, pmouseY);
     } 
   }
 
   @Override
   public void mouseWheel(MouseEvent event) {
-    for (MouseEventsHandler s: SharedPApplet.mouseEvents.getSubscribers()) {
-      s.mouseWheel(mouseX, mouseY, event.getCount());
+    for (MouseEventsHandler observer: SharedPApplet.mouseEvents.getObservers()) {
+      observer.mouseWheel(mouseX, mouseY, event.getCount());
     } 
   }
 }

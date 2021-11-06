@@ -1,51 +1,107 @@
 package nl.benmens.processing.observer;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Collection;
 
 public class Subject<T> {
-
-  private ArrayList<T> subscribers = new ArrayList<T>();
-  private HashMap<T, Subscription<T>> subscriptions = new HashMap<T, Subscription<T>>(); 
+  private ArrayList<WeakReference<Subscription<T>>> subscriptions = new ArrayList<WeakReference<Subscription<T>>>(); 
   protected Object source;
 
   public Subject(Object source) {
     this.source = source;
   }
 
-  public ArrayList<T> getSubscribers() {
-    return new ArrayList<T>(subscribers);
+  public ArrayList<T> getObservers() {
+    ArrayList<T> result = new ArrayList<T>();
+
+    for (WeakReference<Subscription<T>> ref: subscriptions) {
+      Subscription<T> subscription = ref.get();
+
+      if (subscription != null) {
+        result.add(subscription.observer);
+      }
+    }
+
+    return result;
   }
 
-  public Subscription<?> subscribe(T observer) {
-    if (!subscribers.contains(observer)) {
-      subscribers.add(observer);
+  private ArrayList<WeakReference<Subscription<T>>> getSubscriptionsClone() {
+    ArrayList<WeakReference<Subscription<T>>> result = new ArrayList<WeakReference<Subscription<T>>>();
 
-      Subscription<T> subscription =  new Subscription<T>(observer, this);
-      subscriptions.put(observer, subscription);
-
-      return subscription;
-    } else {
-      return this.subscriptions.get(observer);
+    for (WeakReference<Subscription<T>> ref: subscriptions) {
+      result.add(ref);
     }
+
+    return result;
+  }
+
+
+  private Subscription<T> findSubscription(T observer) {
+    for (WeakReference<Subscription<T>> ref: subscriptions) {
+      Subscription<T> subscription = ref.get();
+
+      if (subscription != null && subscription.observer == observer) {
+        return subscription;
+      }
+    }
+
+    return null;
+  }
+
+  public boolean hasObserver(T observer) {
+    for (WeakReference<Subscription<T>> ref: subscriptions) {
+      Subscription<T> subscription = ref.get();
+
+      if (subscription != null && subscription.observer == observer) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private Subscription<?> getSubscription(T observer) {
+    Subscription<T> subscription = findSubscription(observer);
+
+    if (subscription == null) {
+      subscription = new Subscription<T>(observer, this);
+      subscriptions.add(new WeakReference<Subscription<T>>(subscription));
+    } 
+
+    return subscription;
   }
 
   public Subscription<?> subscribe(T observer, SubscriptionManager subscriptionManager) {
-    return (Subscription<?>)subscriptionManager.add(this.subscribe(observer));
+    return (Subscription<?>)subscriptionManager.add(this.getSubscription(observer));
   }
 
   protected void unsubscribe(Object observer) {
-      subscribers.remove(observer);
-      subscriptions.remove(observer);
+    ArrayList<WeakReference<Subscription<T>>> clonedList = getSubscriptionsClone();
+
+    for (WeakReference<Subscription<T>> ref: clonedList) {
+      Subscription<T> subscription = ref.get();
+      
+      if (subscription == null) {
+        // remove cleared subscriptions
+        subscriptions.remove(ref);
+      } else if (subscription.observer == observer) {
+        subscriptions.remove(ref);
+      }
+    }
   }
 
   public void unsubscribeAll() {
-    Collection<Subscription<T>> clonedList = subscriptions.values();
+    ArrayList<WeakReference<Subscription<T>>> clonedList = getSubscriptionsClone();
 
-    for (Subscription<T> s: clonedList) {
-      s.unsubscribe();
+    for (WeakReference<Subscription<T>> ref: clonedList) {
+      Subscription<T> subscription = ref.get();
+
+      if (subscription != null) {
+        subscription.unsubscribe();
+      }
     }
+
+    subscriptions.clear();
   }
   
 }

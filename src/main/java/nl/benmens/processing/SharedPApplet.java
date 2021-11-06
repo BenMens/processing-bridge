@@ -1723,16 +1723,8 @@ public class SharedPApplet {
     SharedPApplet.mouseEvents = new Subject<MouseEventsHandler>(sharedApplet);
   }
 
-  public Subscription<?> subscribe(KeyEventsHandler observer) {
-    return keyEvents.subscribe(observer);
-  }
-
   public Subscription<?> subscribe(KeyEventsHandler observer, SubscriptionManager manager) {
     return keyEvents.subscribe(observer, manager);
-  }
-
-  public Subscription<?> subscribe(MouseEventsHandler observer) {
-    return mouseEvents.subscribe(observer);
   }
 
   public Subscription<?> subscribe(MouseEventsHandler observer, SubscriptionManager manager) {

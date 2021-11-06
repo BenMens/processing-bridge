@@ -9,7 +9,7 @@ public class SubscriptionManager {
   public SubscriptionManager() {
   }
 
-  Subscription<?> add(Subscription<?> subscription) {
+  protected Subscription<?> add(Subscription<?> subscription) {
     this.subscriptions.add(subscription);
 
     return subscription;
