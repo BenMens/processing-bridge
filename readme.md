@@ -1,9 +1,7 @@
 # Readme
 
-## initialize local maven repo with core.jar
+Bridges Processing PApplet so is can be used in a normal Java application.
 
-    mvn initialize
+## Notes
 
-## Hosting a Maven Repository on GitHub
-
-    https://www.baeldung.com/maven-repo-github
+- [Working with the Apache Maven registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)
