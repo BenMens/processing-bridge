@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import io.reactivex.rxjava3.subjects.Subject;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -32,8 +33,15 @@ public class PAppletProxy {
   private static PApplet sharedApplet;
   private static Subject<KeyEvent> keyEvents = PublishSubject.create();
   private static Subject<MouseEvent> mouseEvents = PublishSubject.create();
+  private static Observable<KeyEvent> keyPressedEvents = keyEvents
+      .filter(keyEvent -> keyEvent.getAction() == KeyEvent.PRESS);
+  private static Observable<KeyEvent> keyReleasedEvents = keyEvents
+      .filter(keyEvent -> keyEvent.getAction() == KeyEvent.RELEASE);
+  private static Observable<KeyEvent> keyTypedEvents = keyEvents
+      .filter(keyEvent -> keyEvent.getAction() == KeyEvent.TYPE);
 
-  private PAppletProxy() {}
+  private PAppletProxy() {
+  }
 
   public static PApplet getSharedApplet() {
     return sharedApplet;
@@ -45,6 +53,18 @@ public class PAppletProxy {
 
   public static Subject<KeyEvent> keyEvents() {
     return keyEvents;
+  }
+
+  public static Observable<KeyEvent> keyPressedEvents() {
+    return keyPressedEvents;
+  }
+
+  public static Observable<KeyEvent> keyReleasedEvents() {
+    return keyReleasedEvents;
+  }
+
+  public static Observable<KeyEvent> keyTypedEvents() {
+    return keyTypedEvents;
   }
 
   public static Subject<MouseEvent> mouseEvents() {
@@ -965,7 +985,8 @@ public class PAppletProxy {
     sharedApplet.bezierVertex(x2, y2, x3, y3, x4, y4);
   }
 
-  public static void bezierVertex(float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
+  public static void bezierVertex(float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4,
+      float z4) {
     sharedApplet.bezierVertex(x2, y2, z2, x3, y3, z3, x4, y4, z4);
   }
 
@@ -1085,7 +1106,8 @@ public class PAppletProxy {
     sharedApplet.bezier(x1, y1, x2, y2, x3, y3, x4, y4);
   }
 
-  public static void bezier(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4,
+  public static void bezier(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3,
+      float x4,
       float y4, float z4) {
     sharedApplet.bezier(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
   }
@@ -1110,7 +1132,8 @@ public class PAppletProxy {
     sharedApplet.curve(x1, y1, x2, y2, x3, y3, x4, y4);
   }
 
-  public static void curve(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4,
+  public static void curve(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3,
+      float x4,
       float y4, float z4) {
     sharedApplet.curve(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
   }
@@ -1752,5 +1775,5 @@ public class PAppletProxy {
 
   public static void blend(PImage src, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, int mode) {
     sharedApplet.blend(src, sx, sy, sw, sh, dx, dy, dw, dh, mode);
-  }  
+  }
 }
