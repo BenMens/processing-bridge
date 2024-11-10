@@ -56,7 +56,7 @@ public class View {
   private void registerEventHandlers() {
 
     if (parentView == null) {
-      SharedPApplet.mouseEvents.subscribe(new MouseEventsHandler(){
+      SharedPApplet.mouseEvents.subscribe(new MouseEventsHandler() {
         @Override
         public void mousePressed(float mouseX, float mouseY, float pmouseX, float pmouseY) {
           View targetView = getViewAtPos(mouseX, mouseY);
@@ -64,7 +64,7 @@ public class View {
           while (targetView != null) {
             PVector mousePos = targetView.screenPosToViewPos(new PVector(mouseX, mouseY));
             PVector pmousePos = targetView.screenPosToViewPos(new PVector(pmouseX, pmouseY));
-    
+
             if (targetView.mousePressed(mousePos.x, mousePos.y, pmousePos.x, pmousePos.y)) {
               break;
             } else {
@@ -80,7 +80,7 @@ public class View {
           while (targetView != null) {
             PVector mousePos = targetView.screenPosToViewPos(new PVector(mouseX, mouseY));
             PVector pmousePos = targetView.screenPosToViewPos(new PVector(pmouseX, pmouseY));
-    
+
             if (targetView.mouseReleased(mousePos.x, mousePos.y, pmousePos.x, pmousePos.y)) {
               break;
             } else {
@@ -96,7 +96,7 @@ public class View {
           while (targetView != null) {
             PVector mousePos = targetView.screenPosToViewPos(new PVector(mouseX, mouseY));
             PVector pmousePos = targetView.screenPosToViewPos(new PVector(pmouseX, pmouseY));
-    
+
             if (targetView.mouseMoved(mousePos.x, mousePos.y, pmousePos.x, pmousePos.y)) {
               break;
             } else {
@@ -112,7 +112,7 @@ public class View {
           while (targetView != null) {
             PVector mousePos = targetView.screenPosToViewPos(new PVector(mouseX, mouseY));
             PVector pmousePos = targetView.screenPosToViewPos(new PVector(pmouseX, pmouseY));
-    
+
             if (targetView.mouseDragged(mousePos.x, mousePos.y, pmousePos.x, pmousePos.y)) {
               break;
             } else {
@@ -127,7 +127,7 @@ public class View {
 
           while (targetView != null) {
             PVector mousePos = targetView.screenPosToViewPos(new PVector(mouseX, mouseY));
-    
+
             if (targetView.mouseWheel(mousePos.x, mousePos.y, count)) {
               break;
             } else {
@@ -159,7 +159,7 @@ public class View {
 
           parentView.onChildViewAdded(this);
         }
-      } 
+      }
 
       registerEventHandlers();
     }
@@ -190,18 +190,17 @@ public class View {
     String renderer = SharedPApplet.sketchRenderer();
     if (clipBoundary != null && renderer.endsWith("PGraphicsJava2D")) {
       PVector clipBoundaryTopLeft = new PVector(clipBoundary.x, clipBoundary.y);
-      PVector clipBoundaryBottomRight = new PVector(clipBoundary.x + clipBoundary.width, 
-                                                    clipBoundary.y + clipBoundary.height);
+      PVector clipBoundaryBottomRight = new PVector(clipBoundary.x + clipBoundary.width,
+          clipBoundary.y + clipBoundary.height);
 
       clipBoundaryTopLeft = screenPosToViewPos(clipBoundaryTopLeft);
       clipBoundaryBottomRight = screenPosToViewPos(clipBoundaryBottomRight);
 
       clipBoundary = new Rectangle2D.Float(
-        clipBoundaryTopLeft.x,
-        clipBoundaryTopLeft.y,
-        clipBoundaryBottomRight.x - clipBoundaryTopLeft.x,
-        clipBoundaryBottomRight.y - clipBoundaryTopLeft.y
-      );
+          clipBoundaryTopLeft.x,
+          clipBoundaryTopLeft.y,
+          clipBoundaryBottomRight.x - clipBoundaryTopLeft.x,
+          clipBoundaryBottomRight.y - clipBoundaryTopLeft.y);
     }
 
     if (clipBoundary == null || (clipBoundary.width > 0 && clipBoundary.height > 0)) {
@@ -214,10 +213,10 @@ public class View {
 
       if (clipBoundary != null) {
         SharedPApplet.clip(
-          Math.round(clipBoundary.x), 
-          Math.round(clipBoundary.y), 
-          Math.round(clipBoundary.width), 
-          Math.round(clipBoundary.height));
+            Math.round(clipBoundary.x),
+            Math.round(clipBoundary.y),
+            Math.round(clipBoundary.width),
+            Math.round(clipBoundary.height));
       } else {
         SharedPApplet.noClip();
       }
@@ -231,10 +230,10 @@ public class View {
       for (View childView : childViews) {
         if (clipBoundary != null) {
           SharedPApplet.clip(
-            Math.round(clipBoundary.x), 
-            Math.round(clipBoundary.y), 
-            Math.round(clipBoundary.width), 
-            Math.round(clipBoundary.height));
+              Math.round(clipBoundary.x),
+              Math.round(clipBoundary.y),
+              Math.round(clipBoundary.width),
+              Math.round(clipBoundary.height));
         } else {
           SharedPApplet.noClip();
         }
@@ -244,10 +243,10 @@ public class View {
 
       if (clipBoundary != null) {
         SharedPApplet.clip(
-          Math.round(clipBoundary.x), 
-          Math.round(clipBoundary.y), 
-          Math.round(clipBoundary.width), 
-          Math.round(clipBoundary.height));
+            Math.round(clipBoundary.x),
+            Math.round(clipBoundary.y),
+            Math.round(clipBoundary.width),
+            Math.round(clipBoundary.height));
       } else {
         SharedPApplet.noClip();
       }
@@ -362,14 +361,14 @@ public class View {
 
     if (shouldClip) {
       PVector upperLeft = viewPosToScreenPos(new PVector(boundsRect.x, boundsRect.y));
-      PVector lowerRight = viewPosToScreenPos(new PVector(boundsRect.x + boundsRect.width, 
-                                                          boundsRect.y + boundsRect.height));
+      PVector lowerRight = viewPosToScreenPos(new PVector(boundsRect.x + boundsRect.width,
+          boundsRect.y + boundsRect.height));
 
       viewClip = new Rectangle2D.Float(
-        upperLeft.x, 
-        upperLeft.y, 
-        lowerRight.x - upperLeft.x,
-        lowerRight.y - upperLeft.y);
+          upperLeft.x,
+          upperLeft.y,
+          lowerRight.x - upperLeft.x,
+          lowerRight.y - upperLeft.y);
     }
 
     if (parentView != null) {
@@ -380,11 +379,11 @@ public class View {
       Rectangle2D intersection = parentViewClip.createIntersection(viewClip);
 
       return new Rectangle2D.Float(
-          (float)intersection.getX(), 
-          (float)intersection.getY(),
-          (float)intersection.getWidth(), 
-          (float)intersection.getHeight());
-          
+          (float) intersection.getX(),
+          (float) intersection.getY(),
+          (float) intersection.getWidth(),
+          (float) intersection.getHeight());
+
     } else if (viewClip != null) {
       return viewClip;
     } else if (parentViewClip != null) {
@@ -393,7 +392,6 @@ public class View {
 
     return null;
   }
-
 
   public View getViewAtPos(float x, float y) {
     Rectangle2D.Float boundary = getClipBoundary();
@@ -412,7 +410,6 @@ public class View {
 
     return result;
   }
-
 
   // ########################################################################
   // Mouse handling
@@ -437,11 +434,9 @@ public class View {
     return false;
   }
 
-
   public boolean onScroll(float mouseX, float mouseY, float mouseScroll) {
     return false;
   }
-
 
   // ########################################################################
   // FrameRect

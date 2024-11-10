@@ -37,7 +37,8 @@ public class SharedPApplet {
 
   public static boolean[] keysPressed = new boolean[128];
 
-  private SharedPApplet() {}
+  private SharedPApplet() {
+  }
 
   static public void rect(float a, float b, float c, float d) {
     sharedApplet.rect(a, b, c, d);
