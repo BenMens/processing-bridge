@@ -801,6 +801,26 @@ public class PAppletProxy {
     sharedApplet.endRaw();
   }
 
+  public final int choice(int high) {
+    return sharedApplet.choice(high);
+  }
+
+  public final int choice(int low, int high) {
+    return sharedApplet.choice(low, high);
+  }
+
+  public int hashCode() {
+    return sharedApplet.hashCode();
+  }
+
+  public boolean equals(Object obj) {
+    return sharedApplet.equals(obj);
+  }
+
+  public String toString() {
+    return sharedApplet.toString();
+  }
+
   public static void loadPixels() {
     sharedApplet.loadPixels();
   }

@@ -24,5 +24,5 @@ public class PApplet extends processing.core.PApplet {
   protected void handleMouseEvent(MouseEvent event) {
     super.handleMouseEvent(event);
     PAppletProxy.mouseEvents().onNext(event);
-  }  
+  }
 }
