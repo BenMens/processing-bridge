@@ -12,12 +12,8 @@
 
   <repositories>
     <repository>
-      <id>github-benmens</id>
-      <url>https://maven.pkg.github.com/BenMens/artifacts</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
@@ -27,11 +23,12 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+
   <dependencies>
 
     <dependency>
-      <groupId>org.processing</groupId>
-      <artifactId>core</artifactId>
+      <groupId>com.github.micycle1</groupId>
+      <artifactId>processing3</artifactId>
       <version>3.5.4</version>
     </dependency>
 
