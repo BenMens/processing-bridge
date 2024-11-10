@@ -57,13 +57,4 @@
     </plugins>
   </build>
 
-  <distributionManagement>
-    <repository>
-      <id>github-benmens</id>
-      <name>GitHub BenMens Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/BenMens/artifacts
-      </url>
-    </repository>
-  </distributionManagement>
-
 </project>
