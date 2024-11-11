@@ -29,6 +29,16 @@
       <groupId>com.github.micycle1</groupId>
       <artifactId>processing-core-4</artifactId>
       <version>4.3.3</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>bcprov-jdk14</artifactId>
+          <groupId>bouncycastle</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>bcmail-jdk14</artifactId>
+          <groupId>bouncycastle</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
